@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "Admin")
 public class Admin {
     @Id
-    private Integer adminId;
+    private String adminId;
     private String email;
     private String password;
     private String username;

@@ -14,9 +14,9 @@ import java.util.List;
 @Document(collection = "Project")
 public class Project {
     @Id
-    private Integer projectId;
+    private String projectId;
     private String projectName;
-    private List<Integer> lectureList;
-    private List<Integer> studentList;
+    private List<String> lectureList;
+    private List<String> studentList;
     private Integer classCode;
 }

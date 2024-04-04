@@ -16,11 +16,11 @@ import java.util.List;
 @Document(collection = "Task")
 public class Task {
     @Id
-    private Integer taskID;
+    private String taskID;
     private String taskName;
     private String status;
     private String description;
-    private List<File> attachments;
+    private List<byte[]> attachments;
     private LocalDateTime start;
     private LocalDateTime update;
     private LocalDateTime deadline;

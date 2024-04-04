@@ -14,10 +14,10 @@ import java.util.List;
 @Document(collection = "Topic")
 public class Topic {
     @Id
-    private Integer topicId;
+    private String topicId;
     private String topicName;
-    private Integer projectId;
-    private Integer lectureId;
+    private String projectId;
+    private String lectureId;
     private String description;
-    private List<Integer> studentList;
+    private List<String> studentList;
 }

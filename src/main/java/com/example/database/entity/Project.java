@@ -18,5 +18,5 @@ public class Project {
     private String projectName;
     private List<String> lectureList;
     private List<String> studentList;
-    private Integer classCode;
+    private int classCode;
 }

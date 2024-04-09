@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDTO createStudent(User userInfo) {
+    public UserDTO createUser(User userInfo, String role) {
 
         for(User u : userRepository.findAll()) {
             if(userInfo.getUserNumber().equals(u.getUserNumber()) || userInfo.getEmail().equals(u.getEmail())) {
@@ -33,7 +33,11 @@ public class UserServiceImpl implements UserService {
         }
 
         User user = new User();
-        user.setRole("Student");
+        if(role.equals("Student")) {
+            user.setRole("Student");
+        } else {
+            user.setRole("Lecture");
+        }
         user.setUserName(userInfo.getUserName());
         user.setEmail(userInfo.getEmail());
         user.setPassword(userInfo.getUserNumber());
@@ -43,75 +47,57 @@ public class UserServiceImpl implements UserService {
         user.setUserNumber(userInfo.getUserNumber());
         userRepository.save(user);
 
-        UserDTO createdStudent = new UserDTO();
-        createdStudent.setEmail(user.getEmail());
-        createdStudent.setUserName(user.getUserName());
-        createdStudent.setRole(user.getRole());
-        createdStudent.setUserNumber(user.getUserNumber());
-        createdStudent.setProjectList(user.getProjectList());
-        createdStudent.setTopicList(user.getTopicList());
-        createdStudent.setPhoneNumber(user.getPhoneNumber());
-
-        return createdStudent;
-    }
-
-    @Override
-    public UserDTO createLecture(User userInfo) {
-
-        for(User u : userRepository.findAll()) {
-            if(userInfo.getUserNumber().equals(u.getUserNumber()) || userInfo.getEmail().equals(u.getEmail())) {
-                return null;
+        List<Project> projects = projectRepository.findByClassCodeIn(userInfo.getProjectList());
+        for(Project project : projects) {
+            if(role.equals("Student")) {
+                project.getStudentList().add(userInfo.getUserNumber());
+            } else {
+                project.getLectureList().add(userInfo.getUserNumber());
             }
+            projectRepository.save(project);
         }
 
-        User user = new User();
-        user.setRole("Lecture");
-        user.setUserName(userInfo.getUserName());
-        user.setEmail(userInfo.getEmail());
-        user.setPassword(userInfo.getUserNumber());
-        user.setPhoneNumber(userInfo.getPhoneNumber());
-        user.setProjectList(userInfo.getProjectList());
-        user.setTopicList(userInfo.getTopicList());
-        user.setUserNumber(userInfo.getUserNumber());
-        userRepository.save(user);
+        UserDTO createdUser = new UserDTO();
+        createdUser.setEmail(user.getEmail());
+        createdUser.setUserName(user.getUserName());
+        createdUser.setRole(user.getRole());
+        createdUser.setUserNumber(user.getUserNumber());
+        createdUser.setProjectList(user.getProjectList());
+        createdUser.setTopicList(user.getTopicList());
+        createdUser.setPhoneNumber(user.getPhoneNumber());
 
-        UserDTO createdLecture = new UserDTO();
-        createdLecture.setEmail(user.getEmail());
-        createdLecture.setUserName(user.getUserName());
-        createdLecture.setRole(user.getRole());
-        createdLecture.setUserNumber(user.getUserNumber());
-        createdLecture.setProjectList(user.getProjectList());
-        createdLecture.setTopicList(user.getTopicList());
-        createdLecture.setPhoneNumber(user.getPhoneNumber());
-
-        return createdLecture;
+        return createdUser;
     }
+
+
 
     @Override
     public List<String> viewProjectLecture(String lectureNumber) {
         List<String> projectList = new ArrayList<>();
-        for(User lec : userRepository.findAllByRole("Lecture")) {
-            if(lec.getUserNumber().equals(lectureNumber)) {
-                List<Integer> projectCode = lec.getProjectList();
-                for(int code : projectCode) {
-                    for(Project project : projectRepository.findAll()) {
-                        if(project.getClassCode().equals(code)) {
-                            projectList.add(project.getProjectName().concat(" - ").concat(project.getClassCode().toString()));
-                        }
-                    }
-                }
+        User lecture = userRepository.findByUserNumberAndRole(lectureNumber, "Lecture");
+        if (lecture != null) {
+            List<Integer> projectCodes = lecture.getProjectList();
+            List<Project> projects = projectRepository.findByClassCodeIn(projectCodes);
+            for (Project project : projects) {
+                projectList.add(project.getProjectName() + " - " + project.getClassCode());
             }
         }
+
         return projectList;
     }
+
 
     @Override
     public List<String> viewStudentByLecture(String lectureNumber) {
         List<String> studentList = new ArrayList<>();
-        for(User lec : userRepository.findAllByRole("Lecture")) {
-            if(lec.getUserNumber().equals(lectureNumber)) {
+        User lecture = userRepository.findByUserNumberAndRole(lectureNumber, "Lecture");
+        if (lecture != null) {
+            List<Integer> classCodes = lecture.getProjectList();
+            List<User> students = userRepository.findAllByRoleAndProjectListContaining("Student", classCodes);
+            for (User student : students) {
+                studentList.add(student.getUserName() + " - MSSV: " + student.getUserNumber());
             }
         }
-        return null;
+        return studentList;
     }
 }

@@ -6,8 +6,7 @@ import com.example.database.entity.User;
 import java.util.List;
 
 public interface UserService {
-    public UserDTO createStudent(User user);
-    public UserDTO createLecture(User user);
+    public UserDTO createUser(User user, String role);
 
     public List<String> viewProjectLecture(String lectureNumber);
 

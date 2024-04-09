@@ -7,4 +7,10 @@ import java.util.List;
 
 public interface UserRepository extends MongoRepository<User, Integer> {
     List<User> findAllByRole(String role);
+    List<User> findAllByRoleAndProjectListContaining(String role, List<Integer> code);
+
+    List<User> findAllByRoleAndProjectListContains(String role, int code);
+
+    User findByUserNumberAndRole(String number, String role);
+
 }

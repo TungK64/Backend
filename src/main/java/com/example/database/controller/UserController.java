@@ -2,6 +2,7 @@ package com.example.database.controller;
 
 import com.example.database.dto.LoginDTO;
 import com.example.database.dto.UserDTO;
+import com.example.database.entity.Project;
 import com.example.database.entity.User;
 import com.example.database.service.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,15 @@ public class UserController {
             return new ResponseEntity<>("Wrong email or password", HttpStatus.BAD_REQUEST);
         }else {
             return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/get-project/{userNumber}")
+    public ResponseEntity<?> getProjectList(@PathVariable String userNumber) {
+        List<Project> projects = userService.getProjects(userNumber);
+        if(projects.isEmpty()) {return new ResponseEntity<>("No projects found", HttpStatus.BAD_REQUEST);}
+        else {
+            return new ResponseEntity<>(projects, HttpStatus.OK);
         }
     }
 }

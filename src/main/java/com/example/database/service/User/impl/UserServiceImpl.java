@@ -113,4 +113,15 @@ public class UserServiceImpl implements UserService {
             else return null;
         }
     }
+
+    @Override
+    public List<Project> getProjects(String userNumber) {
+        User user = userRepository.findByUserNumber(userNumber);
+        List<Project> projects = new ArrayList<>();
+        if(user != null) {return null;}
+        else {
+            projects = projectRepository.findByClassCodeIn(user.getProjectList());
+        }
+        return projects;
+    }
 }

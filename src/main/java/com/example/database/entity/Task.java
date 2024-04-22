@@ -24,8 +24,7 @@ public class Task {
     private LocalDateTime start;
     private LocalDateTime update;
     private LocalDateTime deadline;
-    private Integer reporter;
-    private Integer assignee;
-    private List<String> comment;
-    private Integer topicId;
+    private String reporter;
+    private String assignee;
+    private List<Comment> comment;
 }

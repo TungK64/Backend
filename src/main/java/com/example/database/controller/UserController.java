@@ -1,5 +1,6 @@
 package com.example.database.controller;
 
+import com.example.database.dto.LoginDTO;
 import com.example.database.dto.UserDTO;
 import com.example.database.entity.User;
 import com.example.database.service.User.UserService;
@@ -41,5 +42,15 @@ public class UserController {
             return new ResponseEntity<>("You have not been assigned any students yet", HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(studentList, HttpStatus.ACCEPTED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
+        User user = userService.login(loginDTO);
+        if(user == null) {
+            return new ResponseEntity<>("Wrong email or password", HttpStatus.BAD_REQUEST);
+        }else {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.example.database.service.User.impl;
 
 
+import com.example.database.dto.LoginDTO;
 import com.example.database.dto.UserDTO;
 import com.example.database.entity.Project;
 import com.example.database.entity.User;
@@ -99,5 +100,17 @@ public class UserServiceImpl implements UserService {
             }
         }
         return studentList;
+    }
+
+    @Override
+    public User login(LoginDTO loginDTO) {
+        User user = userRepository.findByEmail(loginDTO.getEmail());
+        if(user == null) {return null;}
+        else {
+            if(user.getPassword().equals(loginDTO.getPassword())) {
+                return user;
+            }
+            else return null;
+        }
     }
 }

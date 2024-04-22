@@ -1,5 +1,6 @@
 package com.example.database.service.User;
 
+import com.example.database.dto.LoginDTO;
 import com.example.database.dto.UserDTO;
 import com.example.database.entity.User;
 
@@ -11,4 +12,6 @@ public interface UserService {
     public List<String> viewProjectLecture(String lectureNumber);
 
     public List<String> viewStudentByLecture(String lectureNumber);
+
+    public User login(LoginDTO loginDTO);
 }

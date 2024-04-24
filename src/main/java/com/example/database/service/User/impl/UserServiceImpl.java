@@ -152,4 +152,21 @@ public class UserServiceImpl implements UserService {
         }
         return lecNames;
     }
+
+    @Override
+    public UserDTO getUser(String userNumber, String role) {
+        User user = userRepository.findByUserNumberAndRole(userNumber, role);
+        if(user == null) {return null;}
+        else {
+            UserDTO userDTO = new UserDTO();
+            userDTO.setUserName(user.getUserName());
+            userDTO.setRole(role);
+            userDTO.setEmail(user.getEmail());
+            userDTO.setUserNumber(user.getUserNumber());
+            userDTO.setProjectList(user.getProjectList());
+            userDTO.setTopicList(user.getTopicList());
+            userDTO.setPhoneNumber(user.getPhoneNumber());
+            return userDTO;
+        }
+    }
 }

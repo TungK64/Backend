@@ -19,4 +19,6 @@ public interface UserService {
     public List<Project> getProjects(String userNumber);
 
     public List<String> getLectureName(String lecNumber);
+
+    public UserDTO getUser(String userNumber, String role);
 }

@@ -74,4 +74,11 @@ public class UserController {
             return new ResponseEntity<>(lecName, HttpStatus.OK);
         }
     }
+
+    @GetMapping("/get-user/{userNumber}/{role}")
+    public ResponseEntity<?> getUser(@PathVariable String userNumber, @PathVariable String role) {
+        UserDTO userDTO = userService.getUser(userNumber, role);
+        if(userDTO == null) {return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);}
+        else return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
 }

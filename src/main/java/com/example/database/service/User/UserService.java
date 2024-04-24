@@ -17,4 +17,6 @@ public interface UserService {
     public User login(LoginDTO loginDTO);
 
     public List<Project> getProjects(String userNumber);
+
+    public List<String> getLectureName(String lecNumber);
 }

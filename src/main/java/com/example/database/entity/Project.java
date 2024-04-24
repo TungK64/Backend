@@ -16,7 +16,7 @@ public class Project {
     @Id
     private String projectId;
     private String projectName;
-    private List<String> lectureList;
+    private String lectureNumber;
     private List<String> studentList;
     private int classCode;
 }

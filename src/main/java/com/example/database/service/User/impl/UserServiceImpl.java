@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -49,15 +50,21 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
         List<Project> projects = projectRepository.findByClassCodeIn(userInfo.getProjectList());
-        for(Project project : projects) {
-            if(role.equals("Student")) {
-                project.getStudentList().add(userInfo.getUserNumber());
-            } else {
-                project.getLectureList().add(userInfo.getUserNumber());
+        if(!projects.isEmpty()) {
+            for(Project project : projects) {
+                if(role.equals("Student")) {
+                    List<String> studentList = project.getStudentList();
+                    if (studentList == null) {
+                        studentList = new ArrayList<>(); // Initialize studentList
+                        project.setStudentList(studentList);
+                    }
+                    studentList.add(userInfo.getUserNumber());
+                } else {
+                    project.setLectureNumber(userInfo.getUserNumber());
+                }
+                projectRepository.save(project);
             }
-            projectRepository.save(project);
         }
-
         UserDTO createdUser = new UserDTO();
         createdUser.setEmail(user.getEmail());
         createdUser.setUserName(user.getUserName());
@@ -118,10 +125,31 @@ public class UserServiceImpl implements UserService {
     public List<Project> getProjects(String userNumber) {
         User user = userRepository.findByUserNumber(userNumber);
         List<Project> projects = new ArrayList<>();
-        if(user != null) {return null;}
+        if(user == null) {return null;}
         else {
-            projects = projectRepository.findByClassCodeIn(user.getProjectList());
+            if(user.getProjectList() != null) {
+                projects = projectRepository.findByClassCodeIn(user.getProjectList());
+                return projects;
+            }else {
+                return null;
+            }
         }
-        return projects;
+    }
+
+    @Override
+    public List<String> getLectureName(String lecNumber) {
+        List<String> lecNames = new ArrayList<>();
+        String[] lecNumberList = lecNumber.split(",");
+        for(String str :lecNumberList) {
+            User lecture = userRepository.findByUserNumberAndRole(str, "Lecture");
+            if(lecture != null) {
+                lecNames.add(lecture.getUserName());
+            }
+            else {
+                lecNames.add("");
+            }
+
+        }
+        return lecNames;
     }
 }

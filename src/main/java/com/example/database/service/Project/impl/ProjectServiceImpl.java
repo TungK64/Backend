@@ -27,24 +27,25 @@ public class ProjectServiceImpl implements ProjectService {
         if(project1 != null) {
             return null;
         }
-        List<String> lecNumber = new ArrayList<>();
         List<String> stuNumber = new ArrayList<>();
         Project project = new Project();
 
         project.setProjectName(projectInfo.getProjectName());
 
-        List<User> lectures = userRepository.findAllByRoleAndProjectListContains("Lecture", projectInfo.getClassCode());
-        for(User lec : lectures) {
-            lecNumber.add(lec.getUserNumber());
+        User lecture = userRepository.findByRoleAndProjectListContaining("Lecture", projectInfo.getClassCode());
+
+        if(lecture != null) {
+            project.setLectureNumber(lecture.getUserNumber());
         }
-        project.setLectureList(lecNumber);
+
 
         List<User> students = userRepository.findAllByRoleAndProjectListContains("Student", projectInfo.getClassCode());
-        for(User student : students) {
-            stuNumber.add(student.getUserNumber());
+        if(!students.isEmpty()) {
+            for(User student : students) {
+                stuNumber.add(student.getUserNumber());
+            }
+            project.setStudentList(stuNumber);
         }
-        project.setStudentList(stuNumber);
-
         project.setClassCode(projectInfo.getClassCode());
 
         projectRepository.save(project);

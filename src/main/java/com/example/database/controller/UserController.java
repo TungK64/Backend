@@ -63,4 +63,15 @@ public class UserController {
             return new ResponseEntity<>(projects, HttpStatus.OK);
         }
     }
+
+    @GetMapping("/get-lectures-name/number")
+    public ResponseEntity<?> getLecturesName(@RequestParam String list) {
+        List<String> lecName = userService.getLectureName(list);
+        if(lecName.isEmpty()) {
+            return new ResponseEntity<>("No lectures found", HttpStatus.BAD_REQUEST);
+        }
+        else {
+            return new ResponseEntity<>(lecName, HttpStatus.OK);
+        }
+    }
 }

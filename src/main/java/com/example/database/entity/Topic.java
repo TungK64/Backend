@@ -17,7 +17,7 @@ public class Topic {
     private String topicId;
     private String topicName;
     private String projectId;
-    private String lectureId;
+    private String lectureNumber;
     private String description;
     private List<String> studentList;
 }

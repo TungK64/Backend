@@ -3,10 +3,12 @@ package com.example.database.repository;
 import com.example.database.entity.Project;
 import com.example.database.entity.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface UserRepository extends MongoRepository<User, Integer> {
+@Repository
+public interface UserRepository extends MongoRepository<User, String> {
     List<User> findAllByRole(String role);
 
     User findByRoleAndProjectListContaining(String role, int code);

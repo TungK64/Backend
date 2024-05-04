@@ -2,6 +2,11 @@ package com.example.database.repository;
 
 import com.example.database.entity.Topic;
 import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
 
-public interface TopicRepository extends MongoRepository<Topic, Integer> {
+import java.util.List;
+
+@Repository
+public interface TopicRepository extends MongoRepository<Topic, String> {
+    List<Topic> getAllByProjectId(String projectID);
 }

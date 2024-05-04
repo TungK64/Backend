@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProjectRepository extends MongoRepository<Project, Integer> {
+public interface ProjectRepository extends MongoRepository<Project, String> {
     List<Project> findByClassCodeIn(List<Integer> code);
 
     Project findByProjectNameAndClassCode(String name, int code);

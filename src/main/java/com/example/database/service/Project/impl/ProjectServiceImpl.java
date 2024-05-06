@@ -1,6 +1,7 @@
 package com.example.database.service.Project.impl;
 
 import com.example.database.dto.ProjectDTO;
+import com.example.database.dto.UserDTO;
 import com.example.database.entity.Project;
 import com.example.database.entity.User;
 import com.example.database.repository.ProjectRepository;
@@ -52,4 +53,14 @@ public class ProjectServiceImpl implements ProjectService {
 
         return project;
     }
+
+    @Override
+    public List<User> getStudentByProjectId(String projectId) {
+        Project project = projectRepository.findByProjectId(projectId);
+        List<User> students = new ArrayList<>();
+        students = userRepository.findAllByProjectListContains(project.getClassCode());
+        return students;
+    }
+
+
 }

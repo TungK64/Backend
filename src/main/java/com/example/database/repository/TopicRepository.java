@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface TopicRepository extends MongoRepository<Topic, String> {
     List<Topic> getAllByProjectId(String projectID);
+
+    Topic findTopicByProjectIdAndStudentListContains(String projectID, String studentNumber);
 }

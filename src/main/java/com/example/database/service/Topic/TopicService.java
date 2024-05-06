@@ -10,4 +10,6 @@ public interface TopicService {
     public Topic createTopic(TopicDTO topicDTO, String projectID);
 
     public List<Topic> getTopicList(String projectID);
+
+    public Topic getTopicByStudent(String projectID, String studentNumber);
 }

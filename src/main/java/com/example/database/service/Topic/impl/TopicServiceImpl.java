@@ -29,4 +29,11 @@ public class TopicServiceImpl implements TopicService {
     public List<Topic> getTopicList(String projectID) {
         return topicRepository.getAllByProjectId(projectID);
     }
+
+    @Override
+    public Topic getTopicByStudent(String projectID, String studentNumber) {
+        Topic topic = new Topic();
+        topic = topicRepository.findTopicByProjectIdAndStudentListContains(projectID, studentNumber);
+        return topic;
+    }
 }

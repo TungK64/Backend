@@ -23,4 +23,6 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     User findByUserNumber(String number);
 
+    List<User> findAllByProjectListContains(int classCode);
+
 }

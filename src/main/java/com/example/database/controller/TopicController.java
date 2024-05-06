@@ -39,4 +39,13 @@ public class TopicController {
             return new ResponseEntity<>(topicList, HttpStatus.OK);
         }
     }
+
+    @GetMapping("/get-topic-by-student/{projectId}/{studentNumber}")
+    public ResponseEntity<?> getTopicByStudent(@PathVariable String projectId, @PathVariable String studentNumber) {
+        Topic topic = topicService.getTopicByStudent(projectId, studentNumber);
+        if (topic == null) {return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);}
+        else {
+            return new ResponseEntity<>(topic, HttpStatus.OK);
+        }
+    }
 }

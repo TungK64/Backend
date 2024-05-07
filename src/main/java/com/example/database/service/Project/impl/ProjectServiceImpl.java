@@ -55,10 +55,10 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public List<User> getStudentByProjectId(String projectId) {
+    public List<User> getStudentByProjectIdAndRole(String projectId, String role) {
         Project project = projectRepository.findByProjectId(projectId);
         List<User> students = new ArrayList<>();
-        students = userRepository.findAllByProjectListContains(project.getClassCode());
+        students = userRepository.findAllByProjectListContainsAndRole(project.getClassCode(), role);
         return students;
     }
 

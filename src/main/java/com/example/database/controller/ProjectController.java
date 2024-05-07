@@ -27,9 +27,9 @@ public class ProjectController {
         return new ResponseEntity<>("Project created success", HttpStatus.CREATED);
     }
 
-    @GetMapping("/get-student-by-projectId/{projectId}")
-    public ResponseEntity<?> getStudentByProjectId(@PathVariable String projectId) {
-        List<User> students = projectService.getStudentByProjectId(projectId);
+    @GetMapping("/get-student-by-projectId/{projectId}/{role}")
+    public ResponseEntity<?> getStudentByProjectId(@PathVariable String projectId, @PathVariable String role) {
+        List<User> students = projectService.getStudentByProjectIdAndRole(projectId, role);
         if(students.isEmpty()) {return new ResponseEntity<>("No student found", HttpStatus.NOT_FOUND);}
         else {return new ResponseEntity<>(students, HttpStatus.OK);}
     }

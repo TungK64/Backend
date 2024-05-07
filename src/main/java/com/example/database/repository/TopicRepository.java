@@ -11,4 +11,6 @@ public interface TopicRepository extends MongoRepository<Topic, String> {
     List<Topic> getAllByProjectId(String projectID);
 
     Topic findTopicByProjectIdAndStudentListContains(String projectID, String studentNumber);
+
+    Topic findTopicByTopicId(String topicID);
 }

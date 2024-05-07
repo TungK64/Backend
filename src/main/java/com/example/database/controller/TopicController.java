@@ -4,6 +4,7 @@ import com.example.database.dto.ProjectDTO;
 import com.example.database.dto.TopicDTO;
 import com.example.database.entity.Project;
 import com.example.database.entity.Topic;
+import com.example.database.entity.User;
 import com.example.database.service.Topic.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,5 +48,12 @@ public class TopicController {
         else {
             return new ResponseEntity<>(topic, HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/get-student-in-topic/{topicId}")
+    public ResponseEntity<?> getStudentInTopic(@PathVariable String topicId) {
+        List<User> studentList = topicService.getUserForTopic(topicId);
+        if (studentList == null) {return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);}
+        else { return new ResponseEntity<>(studentList, HttpStatus.OK); }
     }
 }

@@ -2,7 +2,9 @@ package com.example.database.service.Topic.impl;
 
 import com.example.database.dto.TopicDTO;
 import com.example.database.entity.Topic;
+import com.example.database.entity.User;
 import com.example.database.repository.TopicRepository;
+import com.example.database.repository.UserRepository;
 import com.example.database.service.Topic.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ public class TopicServiceImpl implements TopicService {
 
     @Autowired
     TopicRepository topicRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public Topic createTopic(TopicDTO topicDTO, String projectID) {
@@ -36,4 +40,15 @@ public class TopicServiceImpl implements TopicService {
         topic = topicRepository.findTopicByProjectIdAndStudentListContains(projectID, studentNumber);
         return topic;
     }
+
+    @Override
+    public List<User> getUserForTopic(String topicId) {
+        Topic topic = topicRepository.findTopicByTopicId(topicId);
+        if(topic != null) {
+            return userRepository.findAllByUserNumberIn(topic.getStudentList());
+        }
+        return null;
+    }
+
+
 }

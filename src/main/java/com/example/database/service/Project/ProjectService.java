@@ -9,5 +9,5 @@ import java.util.List;
 public interface ProjectService {
     public Project createProject(ProjectDTO project);
 
-    public List<User> getStudentByProjectId(String projectId);
+    public List<User> getStudentByProjectIdAndRole(String projectId, String role);
 }

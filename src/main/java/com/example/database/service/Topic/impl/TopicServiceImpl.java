@@ -45,7 +45,9 @@ public class TopicServiceImpl implements TopicService {
     public List<User> getUserForTopic(String topicId) {
         Topic topic = topicRepository.findTopicByTopicId(topicId);
         if(topic != null) {
-            return userRepository.findAllByUserNumberIn(topic.getStudentList());
+            List<User> studentList = userRepository.findAllByUserNumberIn(topic.getStudentList());
+            System.out.println(studentList);
+            return studentList;
         }
         return null;
     }

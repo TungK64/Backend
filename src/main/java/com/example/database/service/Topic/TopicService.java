@@ -15,4 +15,6 @@ public interface TopicService {
     public Topic getTopicByStudent(String projectID, String studentNumber);
 
     public List<User> getUserForTopic(String topicId);
+
+    public void registerTopic(String topicId, String userNumber);
 }

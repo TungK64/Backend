@@ -56,4 +56,10 @@ public class TopicController {
         if (studentList == null) {return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);}
         else { return new ResponseEntity<>(studentList, HttpStatus.OK); }
     }
+
+    @PostMapping("/register-topic/{topicId}/{userNumber}")
+    public ResponseEntity<?> registerTopic(@PathVariable String topicId, @PathVariable String userNumber) {
+        topicService.registerTopic(topicId, userNumber);
+        return new ResponseEntity<>("Topic registered successfully", HttpStatus.CREATED);
+    }
 }

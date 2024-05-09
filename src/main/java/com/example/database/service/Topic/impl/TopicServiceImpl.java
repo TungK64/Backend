@@ -9,6 +9,7 @@ import com.example.database.service.Topic.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -50,6 +51,30 @@ public class TopicServiceImpl implements TopicService {
             return studentList;
         }
         return null;
+    }
+
+    @Override
+    public void registerTopic(String topicId, String userNumber) {
+        Topic topic = topicRepository.findTopicByTopicId(topicId);
+        User user = userRepository.findByUserNumber(userNumber);
+        if(topic.getStudentList() != null) {
+            topic.getStudentList().add(userNumber);
+        }
+        else {
+            List<String> studentList = new ArrayList<>();
+            studentList.add(userNumber);
+            topic.setStudentList(studentList);
+        }
+        if(user.getTopicList() != null) {
+            user.getTopicList().add(topicId);
+        }
+        else {
+            List<String> topicList = new ArrayList<>();
+            topicList.add(topicId);
+            user.setTopicList(topicList);
+        }
+        topicRepository.save(topic);
+        userRepository.save(user);
     }
 
 

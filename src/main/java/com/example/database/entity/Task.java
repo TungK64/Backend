@@ -7,6 +7,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Data
@@ -21,7 +23,7 @@ public class Task {
     private String description;
     private List<byte[]> attachments;
     private LocalDate start;
-    private LocalDate update;
+    private ZonedDateTime update;
     private LocalDate deadline;
     private String topicId;
     private String reporter;

@@ -42,6 +42,7 @@ public class UserServiceImpl implements UserService {
         }
         user.setUserName(userInfo.getUserName());
         user.setEmail(userInfo.getEmail());
+        user.setDateOfBirth(userInfo.getDateOfBirth());
         user.setPassword(userInfo.getUserNumber());
         user.setPhoneNumber(userInfo.getPhoneNumber());
         user.setProjectList(userInfo.getProjectList());
@@ -72,6 +73,7 @@ public class UserServiceImpl implements UserService {
         createdUser.setUserNumber(user.getUserNumber());
         createdUser.setProjectList(user.getProjectList());
         createdUser.setTopicList(user.getTopicList());
+        createdUser.setDateOfBirth(user.getDateOfBirth());
         createdUser.setPhoneNumber(user.getPhoneNumber());
 
         return createdUser;
@@ -166,6 +168,7 @@ public class UserServiceImpl implements UserService {
             userDTO.setProjectList(user.getProjectList());
             userDTO.setTopicList(user.getTopicList());
             userDTO.setPhoneNumber(user.getPhoneNumber());
+            userDTO.setDateOfBirth(user.getDateOfBirth());
             return userDTO;
         }
     }

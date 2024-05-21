@@ -28,5 +28,6 @@ public class Task {
     private String topicId;
     private String reporter;
     private String assignee;
+    private String priority;
     private List<Comment> comment;
 }

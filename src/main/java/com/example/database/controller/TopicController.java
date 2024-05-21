@@ -5,6 +5,7 @@ import com.example.database.dto.TopicDTO;
 import com.example.database.entity.Project;
 import com.example.database.entity.Topic;
 import com.example.database.entity.User;
+import com.example.database.repository.TopicRepository;
 import com.example.database.service.Topic.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,8 @@ import java.util.List;
 public class TopicController {
     @Autowired
     TopicService topicService;
+    @Autowired
+    private TopicRepository topicRepository;
 
     @PostMapping("/create-topic/{projectID}")
     public ResponseEntity<?> createTopic(@RequestBody TopicDTO topicDTO, @PathVariable String projectID) {
@@ -61,5 +64,14 @@ public class TopicController {
     public ResponseEntity<?> registerTopic(@PathVariable String topicId, @PathVariable String userNumber) {
         topicService.registerTopic(topicId, userNumber);
         return new ResponseEntity<>("Topic registered successfully", HttpStatus.CREATED);
+    }
+
+    @GetMapping("/get-topic-by-id/{topicId}")
+    public ResponseEntity<?> getTopic(@PathVariable String topicId) {
+        Topic topic = topicRepository.findTopicByTopicId(topicId);
+        if(topic == null) {return new ResponseEntity<>("No topic found", HttpStatus.NOT_FOUND);}
+        else {
+            return new ResponseEntity<>(topic, HttpStatus.OK);
+        }
     }
 }

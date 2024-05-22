@@ -29,5 +29,5 @@ public class Task {
     private String reporter;
     private String assignee;
     private String priority;
-    private List<Comment> comment;
+    private List<Notification> notifications;
 }

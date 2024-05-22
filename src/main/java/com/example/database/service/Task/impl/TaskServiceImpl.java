@@ -1,12 +1,17 @@
 package com.example.database.service.Task.impl;
 
+import com.example.database.entity.Notification;
 import com.example.database.entity.Task;
+import com.example.database.entity.User;
+import com.example.database.repository.NotificationRepository;
 import com.example.database.repository.TaskRepository;
+import com.example.database.repository.UserRepository;
 import com.example.database.service.Task.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -16,19 +21,38 @@ import java.util.List;
 public class TaskServiceImpl implements TaskService {
     @Autowired
     TaskRepository taskRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
 
     @Override
-    public Task createTask(Task task, String topicId) {
+    public Task createTask(Task task, String topicId, String reporter, String assignee) {
         Task newTask = new Task();
         newTask.setTaskName(task.getTaskName());
-        newTask.setAssignee(task.getAssignee());
+        newTask.setAssignee(assignee);
         newTask.setDeadline(task.getDeadline());
         newTask.setDescription(task.getDescription());
-        newTask.setReporter(task.getReporter());
+        newTask.setReporter(reporter);
         newTask.setStart(LocalDate.now());
         newTask.setTopicId(topicId);
         newTask.setStatus("to-do");
+        taskRepository.save(newTask);
 
+        Notification notification = new Notification();
+        notification.setTime(LocalDateTime.now());
+        notification.setTaskId(newTask.getTaskID());
+        notification.setReporter(reporter);
+        notification.setType("notice");
+        User user = userRepository.findByUserNumber(reporter);
+        notification.setMessage(user.getUserName() + " created this task");
+        notification.setReceiver(assignee);
+
+        List<Notification> notifications = new ArrayList<>();
+        notifications.add(notification);
+        newTask.setNotifications(notifications);
+
+        notificationRepository.save(notification);
         taskRepository.save(newTask);
         return newTask;
     }

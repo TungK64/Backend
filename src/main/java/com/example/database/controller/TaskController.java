@@ -17,9 +17,9 @@ public class TaskController {
     @Autowired
     TaskService taskService;
 
-    @PostMapping("/create-task/{topicId}")
-    public ResponseEntity<?> createTask(@RequestBody Task task, @PathVariable String topicId) {
-        Task newTask = taskService.createTask(task, topicId);
+    @PostMapping("/create-task/{topicId}/{reporter}/{assignee}")
+    public ResponseEntity<?> createTask(@RequestBody Task task, @PathVariable String topicId, @PathVariable String reporter, @PathVariable String assignee) {
+        Task newTask = taskService.createTask(task, topicId, reporter, assignee);
         if(newTask != null) {
             return new ResponseEntity<>(newTask, HttpStatus.CREATED);
         }

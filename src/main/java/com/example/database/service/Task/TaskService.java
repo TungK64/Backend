@@ -5,7 +5,7 @@ import com.example.database.entity.Task;
 import java.util.List;
 
 public interface TaskService {
-    public Task createTask(Task task, String topicId);
+    public Task createTask(Task task, String topicId, String reporter, String assignee);
 
     public List<Task> getTaskByStatus(String status, String assignee, String topicId);
 

@@ -21,7 +21,7 @@ public class Notification {
     private String reporter;
     private String receiver;
     private String taskId;
-    private LocalDateTime time;
+    private String time;
     private String message;
     private Boolean status;
 }

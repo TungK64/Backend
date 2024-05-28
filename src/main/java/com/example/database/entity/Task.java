@@ -21,7 +21,7 @@ public class Task {
     private String taskName;
     private String status;
     private String description;
-    private List<byte[]> attachments;
+    private List<Attachments> attachments;
     private LocalDate start;
     private ZonedDateTime update;
     private LocalDate deadline;

@@ -1,6 +1,7 @@
 package com.example.database.controller;
 
 import com.example.database.dto.ProjectDTO;
+import com.example.database.entity.Attachments;
 import com.example.database.entity.Task;
 import com.example.database.repository.TaskRepository;
 import com.example.database.service.Task.TaskService;
@@ -22,7 +23,7 @@ public class TaskController {
     private TaskRepository taskRepository;
 
     @PostMapping("/create-task/{topicId}/{reporter}/{assignee}")
-    public ResponseEntity<?> createTask(@RequestBody Task task, @PathVariable String topicId, @PathVariable String reporter, @PathVariable String assignee) {
+    public ResponseEntity<?> createTask(@RequestBody Map<String, String> task, @PathVariable String topicId, @PathVariable String reporter, @PathVariable String assignee) {
         Task newTask = taskService.createTask(task, topicId, reporter, assignee);
         if(newTask != null) {
             return new ResponseEntity<>(newTask, HttpStatus.CREATED);
@@ -58,9 +59,9 @@ public class TaskController {
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 
-    @PostMapping("/attachments/{taskId}/{userNumber}/{receiver}/{fileName}")
-    public ResponseEntity<?> addAttachment(@PathVariable String taskId, @PathVariable String userNumber, @PathVariable String receiver, @PathVariable String fileName, @RequestBody List<byte[]> attachList) {
-        taskService.addAttachments(attachList, taskId, userNumber, receiver, fileName);
+    @PostMapping("/attachments/{taskId}/{userNumber}/{receiver}")
+    public ResponseEntity<?> addAttachment(@PathVariable String taskId, @PathVariable String userNumber, @PathVariable String receiver, @RequestBody List<Attachments> attachList) {
+        taskService.addAttachments(attachList, taskId, userNumber, receiver);
         return new ResponseEntity<>("Success", HttpStatus.OK);
     }
 

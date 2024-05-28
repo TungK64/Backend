@@ -1,5 +1,6 @@
 package com.example.database.service.Task.impl;
 
+import com.example.database.entity.Attachments;
 import com.example.database.entity.Notification;
 import com.example.database.entity.Task;
 import com.example.database.entity.User;
@@ -28,21 +29,25 @@ public class TaskServiceImpl implements TaskService {
     private NotificationRepository notificationRepository;
 
     @Override
-    public Task createTask(Task task, String topicId, String reporter, String assignee) {
+    public Task createTask(Map<String, String> task, String topicId, String reporter, String assignee) {
         Task newTask = new Task();
-        newTask.setTaskName(task.getTaskName());
+        newTask.setTaskName(task.get("taskName"));
         newTask.setAssignee(assignee);
-        newTask.setDeadline(task.getDeadline());
-        newTask.setDescription(task.getDescription());
+        if(task.get("deadline") != null) {
+            DateTimeFormatter localDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+            LocalDate date = LocalDate.parse(task.get("deadline"), localDateFormatter);
+            newTask.setDeadline(date);
+        }
+        if(task.get("description") != null) {
+            newTask.setDescription(task.get("description"));
+        }
+
         newTask.setReporter(reporter);
         newTask.setStart(LocalDate.now());
         newTask.setTopicId(topicId);
-        if(task.getPriority() != null) {
-            newTask.setPriority(task.getPriority());
-        } else {
-            newTask.setPriority("-");
-        }
+        newTask.setPriority("-");
         newTask.setStatus("to-do");
+
         taskRepository.save(newTask);
 
         Notification notification = new Notification();
@@ -122,7 +127,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public void addAttachments(List<byte[]> attachList, String taskId, String userNumber, String receiver, String fileName) {
+    public void addAttachments(List<Attachments> attachList, String taskId, String userNumber, String receiver) {
         Task task = taskRepository.findOneByTaskID(taskId);
         if(task != null) {
             task.setAttachments(attachList);
@@ -139,7 +144,7 @@ public class TaskServiceImpl implements TaskService {
             notification.setReporter(userNumber);
             notification.setReceiver(receiver);
             notification.setStatus(false);
-            notification.setMessage(user.getUserName() + " added " + fileName + " to " + task.getTaskName());
+            notification.setMessage(user.getUserName() + " added attachments to " + task.getTaskName());
             notificationRepository.save(notification);
 
             task.getNotifications().add(notification);
@@ -163,7 +168,7 @@ public class TaskServiceImpl implements TaskService {
             notification.setReporter(userNumber);
             notification.setReceiver(receiver);
             notification.setStatus(false);
-            notification.setMessage(user.getUserName() + " added " + comment + " to " + task.getTaskName());
+            notification.setMessage(user.getUserName() + " comment " + comment + " to " + task.getTaskName());
             notificationRepository.save(notification);
 
             task.getNotifications().add(notification);
@@ -176,14 +181,10 @@ public class TaskServiceImpl implements TaskService {
     public void changeDeadline(String taskId, String userNumber, String receiver, Map<String, String> newDeadline) {
         Task task = taskRepository.findOneByTaskID(taskId);
         if(task != null) {
-            DateTimeFormatter localDateFormatter = DateTimeFormatter.ofPattern("dd MM yyyy");
+            DateTimeFormatter localDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
 
             // Parse the string to LocalDate
             LocalDate date = LocalDate.parse(newDeadline.get("deadline"), localDateFormatter);
-            System.out.println(date);
-
-            task.setDeadline(date);
-            taskRepository.save(task);
 
             User user = userRepository.findByUserNumber(userNumber);
             Notification notification = new Notification();
@@ -197,10 +198,11 @@ public class TaskServiceImpl implements TaskService {
             String formattedDate = now.format(formatter);
             notification.setTime(formattedDate);
 
-            notification.setMessage(user.getUserName() + " changed deadline to " + newDeadline);
+            notification.setMessage(user.getUserName() + " changed deadline to " + date);
             notificationRepository.save(notification);
 
             task.getNotifications().add(notification);
+            task.setDeadline(date);
             taskRepository.save(task);
         }
     }

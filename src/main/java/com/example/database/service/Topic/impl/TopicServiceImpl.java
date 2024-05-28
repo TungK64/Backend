@@ -1,14 +1,21 @@
 package com.example.database.service.Topic.impl;
 
 import com.example.database.dto.TopicDTO;
+import com.example.database.entity.Notification;
+import com.example.database.entity.Project;
 import com.example.database.entity.Topic;
 import com.example.database.entity.User;
+import com.example.database.repository.NotificationRepository;
+import com.example.database.repository.ProjectRepository;
 import com.example.database.repository.TopicRepository;
 import com.example.database.repository.UserRepository;
 import com.example.database.service.Topic.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +26,10 @@ public class TopicServiceImpl implements TopicService {
     TopicRepository topicRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private NotificationRepository notificationRepository;
+    @Autowired
+    private ProjectRepository projectRepository;
 
     @Override
     public Topic createTopic(TopicDTO topicDTO, String projectID) {
@@ -77,5 +88,26 @@ public class TopicServiceImpl implements TopicService {
         userRepository.save(user);
     }
 
+    @Override
+    public void suggestTopic(TopicDTO topicDTO, String projectId, String userNumber) {
+        Project project = projectRepository.findByProjectId(projectId);
+        System.out.println(project);
+        User student = userRepository.findByUserNumber(userNumber);
+        String lectureNumber = project.getLectureNumber();
+        Notification notification = new Notification();
+        notification.setReporter(userNumber);
+        notification.setType("suggest topic");
+        notification.setReceiver(lectureNumber);
+        notification.setStatus(false);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
+        LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
+        String formattedDate = now.format(formatter);
+        notification.setTime(formattedDate);
+
+        notification.setMessage(student.getUserName() + " - " + userNumber + " suggest topic: " + topicDTO.getTopicName()
+                + " with description: " + topicDTO.getTopicDescription() + " to " + project.getProjectName());
+        notificationRepository.save(notification);
+    }
 
 }

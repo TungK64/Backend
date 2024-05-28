@@ -74,4 +74,10 @@ public class TopicController {
             return new ResponseEntity<>(topic, HttpStatus.OK);
         }
     }
+
+    @PostMapping("/suggest/{userNumber}/{projectId}")
+    public ResponseEntity<?> suggestTopic(@RequestBody TopicDTO topicInfo,@PathVariable String projectId, @PathVariable String userNumber) {
+        topicService.suggestTopic(topicInfo, projectId, userNumber);
+        return new ResponseEntity<>("Suggest topic successfully", HttpStatus.CREATED);
+    }
 }

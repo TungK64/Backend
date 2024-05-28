@@ -17,4 +17,6 @@ public interface TopicService {
     public List<User> getUserForTopic(String topicId);
 
     public void registerTopic(String topicId, String userNumber);
+
+    void suggestTopic(TopicDTO topicDTO, String projectId, String userNumber);
 }

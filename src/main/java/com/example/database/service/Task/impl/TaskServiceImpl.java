@@ -1,9 +1,5 @@
 package com.example.database.service.Task.impl;
-
-import com.example.database.entity.Attachments;
-import com.example.database.entity.Notification;
-import com.example.database.entity.Task;
-import com.example.database.entity.User;
+import com.example.database.entity.*;
 import com.example.database.repository.NotificationRepository;
 import com.example.database.repository.TaskRepository;
 import com.example.database.repository.UserRepository;

@@ -80,4 +80,16 @@ public class TopicController {
         topicService.suggestTopic(topicInfo, projectId, userNumber);
         return new ResponseEntity<>("Suggest topic successfully", HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/delete/{topicId}")
+    public ResponseEntity<?> deleteTopic(@PathVariable String topicId) {
+        topicService.deleteTopic(topicId);
+        return new ResponseEntity<>("Topic deleted successfully", HttpStatus.OK);
+    }
+
+    @PutMapping("/edit-topic/{topicId}")
+    public ResponseEntity<?> editTopic(@RequestBody TopicDTO topicDTO, @PathVariable String topicId) {
+        topicService.editTopic(topicId, topicDTO);
+        return new ResponseEntity<>("Topic edited successfully", HttpStatus.OK);
+    }
 }

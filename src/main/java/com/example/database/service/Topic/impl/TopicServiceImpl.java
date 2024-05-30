@@ -58,7 +58,6 @@ public class TopicServiceImpl implements TopicService {
         Topic topic = topicRepository.findTopicByTopicId(topicId);
         if(topic != null) {
             List<User> studentList = userRepository.findAllByUserNumberIn(topic.getStudentList());
-            System.out.println(studentList);
             return studentList;
         }
         return null;
@@ -91,7 +90,6 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public void suggestTopic(TopicDTO topicDTO, String projectId, String userNumber) {
         Project project = projectRepository.findByProjectId(projectId);
-        System.out.println(project);
         User student = userRepository.findByUserNumber(userNumber);
         String lectureNumber = project.getLectureNumber();
         Notification notification = new Notification();
@@ -108,6 +106,26 @@ public class TopicServiceImpl implements TopicService {
         notification.setMessage(student.getUserName() + " - " + userNumber + " suggest topic: " + topicDTO.getTopicName()
                 + " with description: " + topicDTO.getTopicDescription() + " to " + project.getProjectName());
         notificationRepository.save(notification);
+    }
+
+    @Override
+    public void deleteTopic(String topicId) {
+        Topic topic = topicRepository.findTopicByTopicId(topicId);
+        if(topic != null) {
+            topicRepository.delete(topic);
+        }
+        return;
+    }
+
+    @Override
+    public void editTopic(String topicId, TopicDTO topicDTO) {
+        Topic topic = topicRepository.findTopicByTopicId(topicId);
+        if(topic != null) {
+            topic.setTopicName(topicDTO.getTopicName());
+            topic.setDescription(topicDTO.getTopicDescription());
+            topicRepository.save(topic);
+        }
+        return;
     }
 
 }

@@ -1,7 +1,6 @@
 package com.example.database.service.Project.impl;
 
 import com.example.database.dto.ProjectDTO;
-import com.example.database.dto.UserDTO;
 import com.example.database.entity.Project;
 import com.example.database.entity.User;
 import com.example.database.repository.ProjectRepository;
@@ -11,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -62,5 +63,31 @@ public class ProjectServiceImpl implements ProjectService {
         return students;
     }
 
+    @Override
+    public Map<Integer, List<Object>> getAllProject() {
+        List<Project> projects = projectRepository.findAll();
+        Map<Integer, List<Object>> map = new HashMap<>();
 
+        for(Project project : projects) {
+            List<Object> res = new ArrayList<>();
+            if(project.getLectureNumber() != null) {
+                User user = userRepository.findByUserNumber(project.getLectureNumber());
+                if(user != null) {
+                    res.add(project);
+                    res.add(user.getUserName());
+                    map.put(projects.indexOf(project), res);
+                } else {
+                    res.add(project);
+                    res.add("");
+                    map.put(projects.indexOf(project), res);
+                }
+            }
+            else {
+                res.add(project);
+                res.add("");
+                map.put(projects.indexOf(project), res);
+            }
+        }
+        return map;
+    }
 }

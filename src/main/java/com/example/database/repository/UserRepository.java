@@ -26,4 +26,5 @@ public interface UserRepository extends MongoRepository<User, String> {
     List<User> findAllByProjectListContainsAndRole(int classCode, String role);
 
     List<User> findAllByUserNumberIn(List<String> userNumbers);
+
 }

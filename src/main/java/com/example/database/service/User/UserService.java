@@ -6,9 +6,10 @@ import com.example.database.entity.Project;
 import com.example.database.entity.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
-    public UserDTO createUser(User user, String role);
+    public UserDTO createUser(Map<String, String> userInfo, String role);
 
     public List<String> viewProjectLecture(String lectureNumber);
 
@@ -21,4 +22,8 @@ public interface UserService {
     public List<String> getLectureName(String lecNumber);
 
     public UserDTO getUser(String userNumber, String role);
+
+    List<User> getLectureNameByLecNumber(List<String> lecNumber);
+
+    List<UserDTO> getAllUser(String role);
 }

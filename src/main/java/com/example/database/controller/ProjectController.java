@@ -21,6 +21,7 @@ public class ProjectController {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/create-project")
     public ResponseEntity<?> createProject(@RequestBody ProjectDTO projectDTO) {
         Project project = projectService.createProject(projectDTO);

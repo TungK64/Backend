@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/v1")
@@ -18,8 +19,9 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/create-user/{role}")
-    public ResponseEntity<?> signUpUser(@RequestBody User user,@PathVariable String role) {
+    public ResponseEntity<?> signUpUser(@RequestBody Map<String, String> user, @PathVariable String role) {
         UserDTO createdUser = userService.createUser(user, role);
         if(createdUser == null) {
             return new ResponseEntity<>("Created failed, user have been existed", HttpStatus.BAD_REQUEST);

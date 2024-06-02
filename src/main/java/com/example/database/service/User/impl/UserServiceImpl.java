@@ -11,9 +11,12 @@ import com.example.database.service.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,10 +29,10 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserDTO createUser(User userInfo, String role) {
+    public UserDTO createUser(Map<String, String> userInfo, String role) {
 
         for(User u : userRepository.findAll()) {
-            if(userInfo.getUserNumber().equals(u.getUserNumber()) || userInfo.getEmail().equals(u.getEmail())) {
+            if(userInfo.get("userName").equals(u.getUserNumber()) || userInfo.get("email").equals(u.getEmail())) {
                 return null;
             }
         }
@@ -40,17 +43,31 @@ public class UserServiceImpl implements UserService {
         } else {
             user.setRole("Lecture");
         }
-        user.setUserName(userInfo.getUserName());
-        user.setEmail(userInfo.getEmail());
-        user.setDateOfBirth(userInfo.getDateOfBirth());
-        user.setPassword(userInfo.getUserNumber());
-        user.setPhoneNumber(userInfo.getPhoneNumber());
-        user.setProjectList(userInfo.getProjectList());
-        user.setTopicList(userInfo.getTopicList());
-        user.setUserNumber(userInfo.getUserNumber());
+        user.setUserName(userInfo.get("userName"));
+        user.setEmail(userInfo.get("email"));
+
+        String dateOfBirth = userInfo.get("dateOfBirth");
+        DateTimeFormatter localDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(dateOfBirth, localDateFormatter);
+        user.setDateOfBirth(date);
+
+        user.setPassword(userInfo.get("userNumber"));
+        user.setPhoneNumber(userInfo.get("phoneNumber"));
+
+        String projectListString = userInfo.get("projectList");
+        String[] stringNumbers = projectListString.split(",");
+
+        List<Integer> intNumbers = new ArrayList<>();
+
+        for (String stringNumber : stringNumbers) {
+            intNumbers.add(Integer.parseInt(stringNumber.trim()));
+        }
+        user.setProjectList(intNumbers);
+
+        user.setUserNumber(userInfo.get("userNumber"));
         userRepository.save(user);
 
-        List<Project> projects = projectRepository.findByClassCodeIn(userInfo.getProjectList());
+        List<Project> projects = projectRepository.findByClassCodeIn(intNumbers);
         if(!projects.isEmpty()) {
             for(Project project : projects) {
                 if(role.equals("Student")) {
@@ -59,9 +76,9 @@ public class UserServiceImpl implements UserService {
                         studentList = new ArrayList<>(); // Initialize studentList
                         project.setStudentList(studentList);
                     }
-                    studentList.add(userInfo.getUserNumber());
+                    studentList.add(userInfo.get("userNumber"));
                 } else {
-                    project.setLectureNumber(userInfo.getUserNumber());
+                    project.setLectureNumber(userInfo.get("userNumber"));
                 }
                 projectRepository.save(project);
             }
@@ -170,6 +187,38 @@ public class UserServiceImpl implements UserService {
             userDTO.setPhoneNumber(user.getPhoneNumber());
             userDTO.setDateOfBirth(user.getDateOfBirth());
             return userDTO;
+        }
+    }
+
+    @Override
+    public List<User> getLectureNameByLecNumber(List<String> lecNumber) {
+        List<User> lecNames = new ArrayList<>();
+        for(String str :lecNumber) {
+            User lecture = userRepository.findByUserNumberAndRole(str, "Lecture");
+            lecNames.add(Objects.requireNonNullElseGet(lecture, User::new));
+        }
+        return lecNames;
+    }
+
+    @Override
+    public List<UserDTO> getAllUser(String role) {
+        List<User> users = userRepository.findAllByRole(role);
+        if(users.isEmpty()) {return null;}
+        else {
+            List<UserDTO> userDTOList = new ArrayList<>();
+            for(User user : users) {
+                UserDTO userDTO = new UserDTO();
+                userDTO.setUserName(user.getUserName());
+                userDTO.setRole(role);
+                userDTO.setEmail(user.getEmail());
+                userDTO.setUserNumber(user.getUserNumber());
+                userDTO.setProjectList(user.getProjectList());
+                userDTO.setTopicList(user.getTopicList());
+                userDTO.setPhoneNumber(user.getPhoneNumber());
+                userDTO.setDateOfBirth(user.getDateOfBirth());
+                userDTOList.add(userDTO);
+            }
+            return userDTOList;
         }
     }
 }

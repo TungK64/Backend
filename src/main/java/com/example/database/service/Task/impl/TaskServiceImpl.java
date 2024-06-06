@@ -59,6 +59,7 @@ public class TaskServiceImpl implements TaskService {
         User user = userRepository.findByUserNumber(reporter);
         notification.setMessage(user.getUserName() + " created this task");
         notification.setReceiver(assignee);
+        notification.setStatus(false);
 
         List<Notification> notifications = new ArrayList<>();
         notifications.add(notification);
@@ -108,6 +109,7 @@ public class TaskServiceImpl implements TaskService {
             Notification notification = new Notification();
             notification.setTaskId(task.getTaskID());
             notification.setType("notice");
+            notification.setStatus(false);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
             LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
             String formattedDate = now.format(formatter);
@@ -186,6 +188,7 @@ public class TaskServiceImpl implements TaskService {
             Notification notification = new Notification();
             notification.setTaskId(task.getTaskID());
             notification.setType("notice");
+            notification.setStatus(false);
             notification.setReporter(userNumber);
             notification.setReceiver(receiver);
 

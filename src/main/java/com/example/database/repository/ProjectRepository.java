@@ -13,4 +13,6 @@ public interface ProjectRepository extends MongoRepository<Project, String> {
     Project findByProjectNameAndClassCode(String name, int code);
 
     Project findByProjectId(String projectId);
+
+    Project findByClassCode(int classCode);
 }

@@ -14,9 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("api/v1")
@@ -81,5 +83,29 @@ public class AdminController {
         } else {
             return new ResponseEntity<>(lecNameList, HttpStatus.OK);
         }
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/upload-excel/{role}")
+    public ResponseEntity<?> uploadExcel(@PathVariable String role, @RequestParam("file") MultipartFile file) {
+        if(file.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        if(Objects.equals(role, "Student")) {
+            adminService.addExcelUser(file, "Student");
+        } else {
+            adminService.addExcelUser(file, "Lecture");
+        }
+        return new ResponseEntity<>("Imported file successfully", HttpStatus.OK);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @PostMapping("/upload-class-excel")
+    public ResponseEntity<?> uploadClassExcel(@RequestParam("file") MultipartFile file) {
+        if(file.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+        adminService.addExcelClass(file);
+        return new ResponseEntity<>("Imported file successfully", HttpStatus.OK);
     }
 }

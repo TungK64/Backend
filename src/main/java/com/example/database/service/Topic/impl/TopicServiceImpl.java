@@ -95,6 +95,7 @@ public class TopicServiceImpl implements TopicService {
         Notification notification = new Notification();
         notification.setReporter(userNumber);
         notification.setType("suggest topic");
+        notification.setStatus(false);
         notification.setReceiver(lectureNumber);
         notification.setStatus(false);
 
@@ -104,7 +105,7 @@ public class TopicServiceImpl implements TopicService {
         notification.setTime(formattedDate);
 
         notification.setMessage(student.getUserName() + " - " + userNumber + " suggest topic: " + topicDTO.getTopicName()
-                + " with description: " + topicDTO.getTopicDescription() + " to " + project.getProjectName());
+                + " with description: " + topicDTO.getTopicDescription() + " to: " + project.getProjectName() + " - " + project.getClassCode());
         notificationRepository.save(notification);
     }
 

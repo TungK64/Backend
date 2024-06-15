@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userInfo.get("email"));
 
         String dateOfBirth = userInfo.get("dateOfBirth");
-        DateTimeFormatter localDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter localDateFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate date = LocalDate.parse(dateOfBirth, localDateFormatter);
         user.setDateOfBirth(date);
 

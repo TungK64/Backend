@@ -129,6 +129,23 @@ public class AdminServiceImpl implements AdminService {
                         }
                     }
                     userRepository.save(user);
+
+                    List<Project> projects = projectRepository.findByClassCodeIn(user.getProjectList());
+                    if(!projects.isEmpty()) {
+                        for(Project project : projects) {
+                            if(role.equals("Student")) {
+                                List<String> studentList = project.getStudentList();
+                                if (studentList == null) {
+                                    studentList = new ArrayList<>(); // Initialize studentList
+                                    project.setStudentList(studentList);
+                                }
+                                studentList.add(user.getUserNumber());
+                            } else {
+                                project.setLectureNumber(user.getUserNumber());
+                            }
+                            projectRepository.save(project);
+                        }
+                    }
                 }
             }
         } catch (IOException e) {

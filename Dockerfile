@@ -4,6 +4,6 @@ WORKDIR /app
 
 COPY out/artifacts/database_jar/database.jar /app/database.jar
 
-EXPOSE 8080
+EXPOSE 27017
 
 ENTRYPOINT ["java", "-jar", "/app/database.jar"]

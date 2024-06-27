@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("api/v1")
@@ -83,5 +84,15 @@ public class UserController {
         UserDTO userDTO = userService.getUser(userNumber, role);
         if(userDTO == null) {return new ResponseEntity<>("User not found", HttpStatus.BAD_REQUEST);}
         else return new ResponseEntity<>(userDTO, HttpStatus.OK);
+    }
+
+    @PutMapping("/add-class/{classCode}/{userNumber}/{role}")
+    public ResponseEntity<?> addClass(@PathVariable String classCode, @PathVariable String userNumber, @PathVariable String role) {
+        String res = userService.addClassByClassCode(classCode, userNumber, role);
+        if(Objects.equals(res, "Successfully added class")) {
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
+        }
     }
 }

@@ -26,4 +26,6 @@ public interface UserService {
     List<User> getLectureNameByLecNumber(List<String> lecNumber);
 
     List<UserDTO> getAllUser(String role);
+
+    String addClassByClassCode(String classCode, String userNumber, String role);
 }

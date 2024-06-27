@@ -221,4 +221,47 @@ public class UserServiceImpl implements UserService {
             return userDTOList;
         }
     }
+
+    @Override
+    public String addClassByClassCode(String classCode, String userNumber, String role) {
+        if(!isInteger(classCode)) {return "Your class you search does not exist";}
+        User user = userRepository.findByUserNumberAndRole(userNumber, role);
+        Project project = projectRepository.findByClassCode(Integer.parseInt(classCode));
+        if(project == null) {return "Your class you search does not exist";}
+            if(user.getProjectList() != null && !user.getProjectList().contains(Integer.parseInt(classCode))) {
+                user.getProjectList().add(Integer.parseInt(classCode));
+                System.out.println(user);
+            } else if(user.getProjectList() == null){
+                user.setProjectList(new ArrayList<>());
+                user.getProjectList().add(Integer.parseInt(classCode));
+            } else if(user.getProjectList().contains(Integer.parseInt(classCode))) {
+                return "Your are in class already";
+            }
+            if(role.equals("Student")) {
+                if(project.getStudentList() != null) {
+                    project.getStudentList().add(userNumber);
+                } else {
+                    project.setStudentList(new ArrayList<>());
+                    project.getStudentList().add(userNumber);
+                }
+            } else {
+                if(project.getLectureNumber() != null) {
+                    return "This class already have lecture";
+                } else {
+                    project.setLectureNumber(userNumber);
+                }
+            }
+        userRepository.save(user);
+        projectRepository.save(project);
+        return "Successfully added class";
+    }
+
+    public static boolean isInteger(String str) {
+        try {
+            Integer.parseInt(str);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }

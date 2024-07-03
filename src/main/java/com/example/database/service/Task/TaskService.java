@@ -2,10 +2,12 @@ package com.example.database.service.Task;
 
 import com.example.database.entity.Attachments;
 import com.example.database.entity.Task;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
+@Service
 public interface TaskService {
     public Task createTask(Map<String, String> task, String topicId, String reporter, String assignee);
 

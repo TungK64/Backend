@@ -4,10 +4,12 @@ import com.example.database.dto.LoginDTO;
 import com.example.database.dto.UserDTO;
 import com.example.database.entity.Project;
 import com.example.database.entity.User;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 
+@Service
 public interface UserService {
     public UserDTO createUser(Map<String, String> userInfo, String role);
 

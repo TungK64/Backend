@@ -3,15 +3,21 @@ package com.example.database.service.User.impl;
 
 import com.example.database.dto.LoginDTO;
 import com.example.database.dto.UserDTO;
+import com.example.database.entity.Notification;
 import com.example.database.entity.Project;
+import com.example.database.entity.Topic;
 import com.example.database.entity.User;
+import com.example.database.repository.NotificationRepository;
 import com.example.database.repository.ProjectRepository;
+import com.example.database.repository.TopicRepository;
 import com.example.database.repository.UserRepository;
 import com.example.database.service.User.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +33,11 @@ public class UserServiceImpl implements UserService {
     @Autowired
     ProjectRepository projectRepository;
 
+    @Autowired
+    TopicRepository topicRepository;
+
+    @Autowired
+    NotificationRepository notificationRepository;
 
     @Override
     public UserDTO createUser(Map<String, String> userInfo, String role) {
@@ -244,6 +255,27 @@ public class UserServiceImpl implements UserService {
                     project.setStudentList(new ArrayList<>());
                     project.getStudentList().add(userNumber);
                 }
+
+                Notification notification = new Notification();
+                notification.setType("register class");
+                notification.setReporter(userNumber);
+                Project project1 = projectRepository.findByClassCode(Integer.parseInt(classCode));
+                if(project1 != null) {
+                    String lecNumber = project1.getLectureNumber();
+                    if(lecNumber != null) {
+                        notification.setReceiver(lecNumber);
+                    }
+                    User student = userRepository.findByUserNumberAndRole(userNumber, "Student");
+                    if(student != null) {
+                        notification.setMessage(student.getUserName() + " participated in " + project1.getProjectName() + " - " + classCode);
+                    }
+                }
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
+                LocalDateTime now = LocalDateTime.now(ZoneId.of("Asia/Ho_Chi_Minh"));
+                String formattedDate = now.format(formatter);
+                notification.setTime(formattedDate);
+                notification.setStatus(false);
+                notificationRepository.save(notification);
             } else {
                 if(project.getLectureNumber() != null) {
                     return "This class already have lecture";
@@ -254,6 +286,23 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         projectRepository.save(project);
         return "Successfully added class";
+    }
+
+    @Override
+    public String getLectureByTopicId(String topicId) {
+        Topic topic = topicRepository.findTopicByTopicId(topicId);
+        if(topic != null) {
+            String projectId = topic.getProjectId();
+            Project project = projectRepository.findByProjectId(projectId);
+            if(project != null) {
+                String lecNumber = project.getLectureNumber();
+                User lecturer = userRepository.findByUserNumberAndRole(lecNumber, "Lecture");
+                if(lecturer != null) {
+                    return lecturer.getUserNumber();
+                }
+            }
+        }
+        return null;
     }
 
     public static boolean isInteger(String str) {

@@ -30,4 +30,6 @@ public interface UserService {
     List<UserDTO> getAllUser(String role);
 
     String addClassByClassCode(String classCode, String userNumber, String role);
+
+    String getLectureByTopicId(String topicId);
 }

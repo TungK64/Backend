@@ -14,6 +14,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class TaskServiceImpl implements TaskService {
@@ -25,10 +26,15 @@ public class TaskServiceImpl implements TaskService {
     private NotificationRepository notificationRepository;
 
     @Override
-    public Task createTask(Map<String, String> task, String topicId, String reporter, String assignee) {
+    public Task createTask(Map<String, String> task, String topicId, String reporter, String receiver, String role) {
         Task newTask = new Task();
         newTask.setTaskName(task.get("taskName"));
-        newTask.setAssignee(assignee);
+        if(Objects.equals(role, "Student")) {
+            newTask.setAssignee(reporter);
+        } else {
+            newTask.setAssignee(receiver);
+        }
+
         if(task.get("deadline") != null) {
             DateTimeFormatter localDateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
             LocalDate date = LocalDate.parse(task.get("deadline"), localDateFormatter);
@@ -58,7 +64,7 @@ public class TaskServiceImpl implements TaskService {
         notification.setType("created");
         User user = userRepository.findByUserNumber(reporter);
         notification.setMessage(user.getUserName() + " created this task");
-        notification.setReceiver(assignee);
+        notification.setReceiver(receiver);
         notification.setStatus(false);
 
         List<Notification> notifications = new ArrayList<>();
@@ -166,7 +172,7 @@ public class TaskServiceImpl implements TaskService {
             notification.setReporter(userNumber);
             notification.setReceiver(receiver);
             notification.setStatus(false);
-            notification.setMessage(user.getUserName() + " comment " + comment + " to " + task.getTaskName());
+            notification.setMessage(user.getUserName() + " comment " + comment + " ");
             notificationRepository.save(notification);
 
             task.getNotifications().add(notification);

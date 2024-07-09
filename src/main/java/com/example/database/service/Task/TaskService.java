@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Service
 public interface TaskService {
-    public Task createTask(Map<String, String> task, String topicId, String reporter, String assignee);
+    public Task createTask(Map<String, String> task, String topicId, String reporter, String assignee, String role);
 
     public List<Task> getTaskByStatus(String status, String assignee, String topicId);
 

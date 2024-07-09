@@ -95,4 +95,14 @@ public class UserController {
             return new ResponseEntity<>(res, HttpStatus.BAD_REQUEST);
         }
     }
+
+    @GetMapping("/get-lecturer/{topicId}")
+    public ResponseEntity<?> getLecturerByTopicId(@PathVariable String topicId) {
+        String res = userService.getLectureByTopicId(topicId);
+        if(res != null) {
+            return new ResponseEntity<>(res, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Can't find lecturer of this topic", HttpStatus.BAD_REQUEST);
+        }
+    }
 }

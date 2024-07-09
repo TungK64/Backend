@@ -22,9 +22,9 @@ public class TaskController {
     @Autowired
     private TaskRepository taskRepository;
 
-    @PostMapping("/create-task/{topicId}/{reporter}/{assignee}")
-    public ResponseEntity<?> createTask(@RequestBody Map<String, String> task, @PathVariable String topicId, @PathVariable String reporter, @PathVariable String assignee) {
-        Task newTask = taskService.createTask(task, topicId, reporter, assignee);
+    @PostMapping("/create-task/{topicId}/{reporter}/{receiver}/{role}")
+    public ResponseEntity<?> createTask(@RequestBody Map<String, String> task, @PathVariable String topicId, @PathVariable String reporter, @PathVariable String receiver, @PathVariable String role) {
+        Task newTask = taskService.createTask(task, topicId, reporter, receiver, role);
         if(newTask != null) {
             return new ResponseEntity<>(newTask, HttpStatus.CREATED);
         }

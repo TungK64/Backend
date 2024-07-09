@@ -20,7 +20,7 @@ public class TaskController {
     @Autowired
     TaskService taskService;
     @Autowired
-    private TaskRepository taskRepository;
+    TaskRepository taskRepository;
 
     @PostMapping("/create-task/{topicId}/{reporter}/{receiver}/{role}")
     public ResponseEntity<?> createTask(@RequestBody Map<String, String> task, @PathVariable String topicId, @PathVariable String reporter, @PathVariable String receiver, @PathVariable String role) {

@@ -19,7 +19,7 @@ public class NotificationController {
     @Autowired
     NotificationService notificationService;
     @Autowired
-    private NotificationRepository notificationRepository;
+    NotificationRepository notificationRepository;
 
     @GetMapping("/get-notification/{receiver}")
     public ResponseEntity<?> getNotification(@PathVariable String receiver) {

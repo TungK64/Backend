@@ -22,7 +22,7 @@ public class TopicController {
     @Autowired
     TopicService topicService;
     @Autowired
-    private TopicRepository topicRepository;
+    TopicRepository topicRepository;
 
     @PostMapping("/create-topic/{projectID}")
     public ResponseEntity<?> createTopic(@RequestBody TopicDTO topicDTO, @PathVariable String projectID) {

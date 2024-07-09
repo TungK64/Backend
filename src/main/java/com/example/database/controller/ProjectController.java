@@ -19,7 +19,7 @@ public class ProjectController {
     @Autowired
     ProjectService projectService;
     @Autowired
-    private ProjectRepository projectRepository;
+    ProjectRepository projectRepository;
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/create-project")

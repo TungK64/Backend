@@ -25,11 +25,11 @@ public class TopicServiceImpl implements TopicService {
     @Autowired
     TopicRepository topicRepository;
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
     @Autowired
-    private NotificationRepository notificationRepository;
+    NotificationRepository notificationRepository;
     @Autowired
-    private ProjectRepository projectRepository;
+    ProjectRepository projectRepository;
 
     @Override
     public Topic createTopic(TopicDTO topicDTO, String projectID) {

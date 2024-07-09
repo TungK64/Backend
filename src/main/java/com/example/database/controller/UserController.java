@@ -18,7 +18,7 @@ import java.util.Objects;
 @RequestMapping("api/v1")
 public class UserController {
     @Autowired
-    private UserService userService;
+    UserService userService;
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/create-user/{role}")

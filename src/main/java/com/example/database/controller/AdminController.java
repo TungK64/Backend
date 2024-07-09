@@ -24,12 +24,11 @@ import java.util.Objects;
 @RequestMapping("api/v1")
 public class AdminController {
     @Autowired
-    private AdminService adminService;
-
+    AdminService adminService;
     @Autowired
-    private UserService userService;
+    UserService userService;
     @Autowired
-    private ProjectService projectService;
+    ProjectService projectService;
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/admin-login")

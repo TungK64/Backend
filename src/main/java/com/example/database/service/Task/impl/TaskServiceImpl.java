@@ -21,9 +21,9 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     TaskRepository taskRepository;
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
     @Autowired
-    private NotificationRepository notificationRepository;
+    NotificationRepository notificationRepository;
 
     @Override
     public Task createTask(Map<String, String> task, String topicId, String reporter, String receiver, String role) {

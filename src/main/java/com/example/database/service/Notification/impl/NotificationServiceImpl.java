@@ -19,13 +19,13 @@ public class NotificationServiceImpl implements NotificationService {
     @Autowired
     NotificationRepository notificationRepository;
     @Autowired
-    private TaskRepository taskRepository;
+    TaskRepository taskRepository;
     @Autowired
-    private TopicRepository topicRepository;
+    TopicRepository topicRepository;
     @Autowired
-    private ProjectRepository projectRepository;
+    ProjectRepository projectRepository;
     @Autowired
-    private UserRepository userRepository;
+    UserRepository userRepository;
 
     @Override
     public Map<Integer, List<?>> getAllNotification(String receiver) {
